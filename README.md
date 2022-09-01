@@ -1,6 +1,12 @@
-# YANES Emulator SixtyFiveZeroTwo
+<p align="center">
+    <b> YANES Emulator </b>
+<br />
+    Yet Another Nes Emulator.
+</p>
 
-## Yet Another Nes Emulator.
+<p align="center">
+  <img width="80%" src="https://github.com/0xdeadabed/yanes/blob/main/media/nes.png">
+</p>
 
 ### What it does?
 It basically emulates the 6502 assembly with other cool features that I will probably implement.
