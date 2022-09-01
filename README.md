@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img width="80%" src="https://github.com/0xdeadabed/yanes/blob/main/media/nes.png">
+  <img width="80%" src="https://github.com/chmodeed/yanes/blob/main/media/nes.png">
 </p>
 
 ### What it does?
