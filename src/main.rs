@@ -2,6 +2,8 @@
 For more informations:
 https://www.nesdev.org/wiki/CPU_ALL
 
+opcodes https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+
 The status flags:
 7  bit  0
 ---- ----
@@ -22,6 +24,7 @@ pub struct CPU {
 	pub y:	u8,
 	pub pc:	u16,
 	pub s_flags:	u8,
+	pub memory:	[u8; 0xFFFF]
 }
 
 // Implementation block, all `COU` associated functions & methods go in here
@@ -32,22 +35,30 @@ impl CPU {
 			x: 0,
 			y: 0,
 			pc: 0,
-			s_flags: 0
+			s_flags: 0,
+			memory: []
 		}
 	}
 
-	pub fn interpreter(&mut self, instructions: Vec<u8>) {
-		//init();
+	pub fn read_memory(&self, addr: u16) -> u8 {
+		self.memory[addr as usize];
+	}
 
+	pub fn write_memory(&mut self, addr: u16, data: u8) {
+		self.memory[addr as usize] = data;
+	}
+
+	pub fn load(&mut self, program: Vec<u8>) {
+		self.memory[0x8000 .. (0x8000 + program.len())].copy_from_slice(&program[..]);
+		self.program_counter = 0x8000;
+	}
+
+	pub fn interpreter(&mut self, instructions: Vec<u8>) {
 		loop {
-			// An opcode should be a byte size so I use as usize
-			let opcodes = instructions[self.pc as usize];
-			// Noice job rust -> https://github.com/dtolnay/rust-faq#why-doesnt-rust-have-increment-and-decrement-operators
+			let opcodes = self.read_memory(self.pc);
 			self.pc += 1;
 			match opcodes {
-				// opcodes https://www.nesdev.org/wiki/CPU_unofficial_opcodes
-				// 0xA9 is where we start reading in data! Basically,
-				// the byte that immediately follows the opcode in memory is our “target”.
+				// 0xA9 is where we start reading in data!
 				0xA9 => {
 					let i_pc = instructions[self.pc as usize];
 					self.pc += 1;
@@ -87,6 +98,11 @@ impl CPU {
 				_ => {}
 			}
 		}
+	}
+
+	pub fn load_and_interpret(&mut self, program: Vec<u8>) {
+		self.load(program);
+		self.interpreter()
 	}
 }
 
